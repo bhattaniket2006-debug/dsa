@@ -1,0 +1,29 @@
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        ListNode dummy(0, head);
+        ListNode* prev = &dummy;
+        ListNode* temp = head;
+
+        while (temp) {
+            
+            if (temp->next && temp->val == temp->next->val) {
+                
+                int value = temp->val;
+
+                
+                while (temp && temp->val == value) {
+                    temp = temp->next;
+                }
+
+                prev->next = temp;
+            }
+            else {
+                prev = temp;
+                temp = temp->next;
+            }
+        }
+
+        return dummy.next;
+    }
+};
