@@ -1,36 +1,49 @@
 class Solution {
 public:
-int n;
-int solve(int idx,vector<int>&nums,int k,vector<vector<int>>&dp){
-    if(k==1){int sum=0;
-    for(int i=idx;i<n;i++){
-        sum+=nums[i];
-    }
-    return sum;
-    }
-    if (dp[idx][k]!=-1)return dp[idx][k];
-    int sum=0;
-    int ans=INT_MAX;
-   
-    for (int i=idx;i<n;i++){
-        sum+=nums[i];
-      int remain=solve(i+1,nums,k-1,dp);
-      int curr=max(sum,remain);
-      
-      ans=min(ans,curr);
-      
 
+    bool ispossible(vector<int>& nums, int k, int mid) {
+
+        int students = 1;
+        int sum = 0;
+
+        for (int i = 0; i < nums.size(); i++) {
+
+            if (sum + nums[i] <= mid) {
+                sum += nums[i];
+            }
+            else {
+                students++;
+                sum = nums[i];
+            }
+        }
+
+        return students <= k;
     }
-    return dp[idx][k]=ans;
-}
+
     int splitArray(vector<int>& nums, int k) {
-        n=nums.size();
-      
-        vector<vector<int>>dp(n+1,vector<int>(k+1,-1));
-        return solve (0,nums,k,dp);
 
+        int low = *max_element(nums.begin(), nums.end());
 
+        int high = accumulate(nums.begin(), nums.end(), 0);
 
-        
+        int ans = -1;
+
+        while (low <= high) {
+
+            int mid = low + (high - low) / 2;
+
+            if (ispossible(nums, k, mid)) {
+
+                ans = mid;
+                high = mid - 1;
+
+            }
+            else {
+
+                low = mid + 1;
+            }
+        }
+
+        return ans;
     }
 };
